@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class UserDto {
-    private Integer id;
     private String fname;
     private String lname;
     private String email;

@@ -2,7 +2,8 @@ package com.bridgelabz.notes.controllers;
 import java.util.List;
 
 import com.bridgelabz.notes.entities.User;
-import com.bridgelabz.notes.payload.LoginBody;
+import com.bridgelabz.notes.payload.LoginDTO;
+import com.bridgelabz.notes.payload.Response;
 import com.bridgelabz.notes.payload.ResponseDTO;
 import com.bridgelabz.notes.payload.UserDto;
 import com.bridgelabz.notes.services.UserService;
@@ -27,11 +28,10 @@ public class UserController {
         ResponseDTO responseDTO = new ResponseDTO("Register Successful", userData);
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
-    //update
-//    @PostMapping("/{userId}")
+
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto user,@PathVariable Integer userId){
-        UserDto userDto =  this.userService.updateUser(user, userId);
+    public ResponseEntity<User> updateUser(@RequestBody UserDto user,@PathVariable Integer userId){
+        User userDto =  this.userService.updateUser(user, userId);
         return ResponseEntity.ok(userDto);
     }
     //delete
@@ -50,27 +50,15 @@ public class UserController {
 
     //get all
     @GetMapping("/")
-    public ResponseEntity<List<UserDto>> getAllUsers(){
-        List<UserDto> userDtos =  this.userService.getAllUser();
+    public ResponseEntity<List<User>> getAllUsers(){
+        List<User> userDtos =  this.userService.getAllUser();
         return ResponseEntity.ok(userDtos);
     }
-//    @PostMapping("/login")
-//    public ResponseEntity<UserDto> userLogin(@RequestBody LoginBody loginBody){
-//        UserDto apiRes = new UserDto();
-//        try {
-//            apiRes =  this.userService.userLogin(loginBody.getEmail(), loginBody.getPassword());
-//            return ResponseEntity.ok(apiRes);
-//        } catch (Exception e) {
-//            return new ResponseEntity<UserDto>(apiRes, HttpStatus.UNAUTHORIZED);
-//        }
-//
-//    }
 
     @PostMapping("/login")
-    public ResponseEntity<?> userLogin(@RequestBody LoginBody loginBody) {
+    public ResponseEntity<?> userLogin(@RequestBody LoginDTO loginBody) {
         try {
-            UserDto apiRes = this.userService.userLogin(loginBody.getEmail(), loginBody.getPassword());
-//            return ResponseEntity.ok(apiRes );
+            Response apiRes = this.userService.userLogin(loginBody);
             System.out.println(apiRes);
             return ResponseEntity.ok(apiRes);
         } catch (Exception e) {

@@ -3,6 +3,12 @@ package com.bridgelabz.notes.services.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.bridgelabz.notes.exception.LoginException;
+import com.bridgelabz.notes.exception.RegistrationException;
+import com.bridgelabz.notes.payload.LoginDTO;
+import com.bridgelabz.notes.payload.Response;
+import com.bridgelabz.notes.util.Constant;
+import com.bridgelabz.notes.util.TokenUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,24 +22,31 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private TokenUtility tokenUtility;
+
     //create
     @Override
     public User createUser(UserDto userDto) {
+        User user = userRepo.findByEmail(userDto.getEmail());
+        if (user != null) {
+            throw new RegistrationException(userDto.getEmail() + " " + "Constant.REGISTER_EMAIL_FOUND");
+        }
         User userData = new User(userDto);
         return userRepo.save(userData);
     }
 
     //new Update api
     @Override
-    public UserDto updateUser(UserDto userDto, Integer userId) {
+    public User updateUser(UserDto userDto, Integer userId) {
         User user = this.userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setFname(userDto.getFname());
         user.setLname(userDto.getLname());
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
-        user = this.userRepo.save(user);
-        return this.UserToDto(user);
+        return userRepo.save(user);
+
     }
 
     //delete
@@ -45,23 +58,27 @@ public class UserServiceImpl implements UserService {
 
     //get
     @Override
-    public UserDto getUser(Integer userId) {
-        User user= this.userRepo.findById(userId).orElseThrow();
-        return this.UserToDto(user);
+    public User getUser(Integer userId) {
+        return userRepo.findById(userId).orElseThrow();
     }
 
     //get all
     
-    public List<UserDto> getAllUser() {
-		List<User> users=this.userRepo.findAll();
-        List<UserDto> allNotes= users.stream().map((user)->this.UserToDto(user)).collect(Collectors.toList());
-        return allNotes;
+    public List<User> getAllUser() {
+        return userRepo.findAll().stream().toList();
     }
 
     //login
-    public UserDto userLogin(String email, String password) {
-        User user= this.userRepo.findByEmailAndPassword(email,password);
-        return this.UserToDto(user);
+    public Response userLogin(LoginDTO loginDTO) {
+        User user;
+        if (userRepo.findAll().stream().anyMatch(i -> i.getEmail().equals(loginDTO.getEmail())
+                && i.getPassword().matches(loginDTO.getPassword())
+                && i.isActive())) {
+            user = userRepo.findByEmail(loginDTO.getEmail());
+            return new Response(200, Constant.SUCCESS_LOGIN,tokenUtility.createToken(user.getUser_id()));
+        } else {
+            throw new LoginException(Constant.FAILED_LOGIN);
+        }
     }
 
     //new code for getUserById method
@@ -84,16 +101,6 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(userDto.getPassword());
         System.out.println(user);
 		return user;
-	}
-
-	public UserDto UserToDto(User user ) {
-		UserDto userDto= new UserDto();
-        userDto.setId(user.getId());
-        user.setFname(userDto.getFname());
-        user.setLname(userDto.getLname());
-		userDto.setEmail(user.getEmail());
-		userDto.setPassword(user.getPassword());
-		return userDto;
 	}
 }
     

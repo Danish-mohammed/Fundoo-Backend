@@ -1,12 +1,10 @@
 package com.bridgelabz.notes.entities;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,14 +25,10 @@ public class Collaborator implements Serializable{
     private int collabId;
 
     @Column(name = "collab_created_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
-    private Date createdDate;
+    private LocalDate createdDate;
 
     @Column(name = "collab_updated_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    @UpdateTimestamp
-    private Date updatedDate;
+    private LocalDate updatedDate;
 
     @Column(name = "collab_user_id")
     @NotNull

@@ -6,12 +6,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
 @Data
-public class User {
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,10 +34,8 @@ public class User {
 
     private String profile;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDate regDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDate updateDate;
 
     @Column(name = "u_active", columnDefinition = "boolean default false")

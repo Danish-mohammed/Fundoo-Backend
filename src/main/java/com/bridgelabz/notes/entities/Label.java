@@ -1,6 +1,7 @@
 package com.bridgelabz.notes.entities;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -32,15 +33,11 @@ public class Label implements Serializable{
     @Column(name = "user_id")
     private int userId;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
     @Column(name = "label_created_date")
-    private Date createdDate;
+    private LocalDate createdDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @UpdateTimestamp
     @Column(name = "label_updated_date")
-    private Date updatedDate;
+    private LocalDate updatedDate;
 
     @JsonIgnoreProperties(value = "labels")
     @ManyToMany(mappedBy = "labels", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

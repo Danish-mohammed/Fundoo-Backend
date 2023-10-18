@@ -1,6 +1,8 @@
 package com.bridgelabz.notes.entities;
 
+import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +20,7 @@ import lombok.Data;
 @Data
 public class Notes implements Serializable{
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -48,14 +51,10 @@ public class Notes implements Serializable{
 	private boolean isTrash;
 
 	@Column(name = "note_created_date")
-	@Temporal(TemporalType.TIMESTAMP)
-	@CreationTimestamp
-	private Date createdDate;
+	private LocalDate createdDate;
 
 	@Column(name = "note_updated_date")
-	@Temporal(TemporalType.TIMESTAMP)
-	@UpdateTimestamp
-	private Date updatedDate;
+	private LocalDate updatedDate;
 
 	@Column(name = "user_id")
 	@NotNull

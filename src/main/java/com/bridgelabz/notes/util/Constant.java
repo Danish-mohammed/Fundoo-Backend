@@ -8,7 +8,7 @@ public class Constant {
     public final static String BASE_URL = "http://192.168.0.74:4200/";
     public final static String SET_URI = "setpassword";
     public final static String VERIFY_URI = "verify";
-    public final static String UPLOAD_FOLDER = "/home/admin1/Documents/workspace-spring/FundooNoteBackend/UserService/uploads/";
+    public final static String UPLOAD_FOLDER = "C:\\Users\\user\\Desktop\\Fundoo\\Fundoo_springboot\\server\\Notes\\";
 
     // method related message
     public final static String SERVICE_LOGIN_METHOD = "method: login service";
